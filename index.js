@@ -42,7 +42,11 @@ function passesMapper(passes){
   return output
 }
 
-var root = require('express')()
+var express = require('express')
+var root = express()
+
+root.set('json spaces',2);
+root.enable('trust proxy');
 
 root.use((req,res,next)=>{
   console.log(req.ip,req.method,req.url);
