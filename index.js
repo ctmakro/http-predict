@@ -94,6 +94,19 @@ root.get('/list',(req,res,next)=>{
   .catch(next)
 })
 
+root.get('/tle',(req,res,next)=>{
+  if(req.darpa==='-1')throw 'NORAD # of the object not specified'
+  backend.AQL(`
+    return document(tles,@id)
+    `,{id:req.darpa}
+  )
+  .then(r=>{
+    if(!r[0]) throw 'NORAD # not found in database'
+    res.send(r[0].text)
+  })
+  .catch(next)
+})
+
 root.get('/',(req,res)=>{
   res.end(`
     KCSA Real-time Satellite Tracker
@@ -109,8 +122,11 @@ root.get('/',(req,res)=>{
     /list?num=41845
     Detailed info of the target.
 
+    /tle?num=41845
+    TLE description of the target (for use in other software).
+
     'num' is the NORAD # of the target.
-    TLEs are acquired from space-track.org and stored in our database.
+    TLEs are acquired from space-track.org and stored in ArangoDB database.
 
     Server time and timezone: ${humanRep(Date.now())}
 

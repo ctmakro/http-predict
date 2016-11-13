@@ -1,8 +1,13 @@
 var fs = require('fs')
 var config = require('./config.js')
 var backend = require('./backend.js').Backend(config.arangodb.conn,config.arangodb.dbname)
+
+// predictlib is not written as a module for node.
+// therefore we have to load and evaluate it differently
 var PLib_code = fs.readFileSync('./andrewtwest-orbtrak/predictlib.js')
 
+// code within the following function will be
+// appended to original predictlib.js before evaluation
 var postfix = (function(){
 
   //implemented for ease of operation
@@ -44,12 +49,15 @@ var postfix = (function(){
 
   return PLib;
 }).toString()
+
+// post processing
 postfix = postfix.slice(postfix.indexOf("{") + 1, postfix.lastIndexOf("}"))
-
+// append
 PLib_code += postfix
-
+// evaluate
 var PLib = new Function(PLib_code);
 
+//load tle from file
 function loadTLE(path){
   var tlefile = fs.readFileSync(path,{encoding:'utf8',flag:'r'})
 
@@ -62,10 +70,10 @@ function loadTLE(path){
       tlelines[i],tlelines[i+1],tlelines[i+2]
     ])
   }
-
   return tledata
 }
 
+// load tle from database (async)
 function loadFromDatabase(darpa){
   return backend.AQL(`
     for i in tles
@@ -79,6 +87,7 @@ function loadFromDatabase(darpa){
   })
 }
 
+// create a plib instance, by loading TLE from database (async)
 module.exports.PLib_create_fromDB = (darpa)=>{
   var plib = PLib();
   return loadFromDatabase(darpa)
@@ -94,6 +103,7 @@ module.exports.PLib_create_fromDB = (darpa)=>{
   .catch(console.error)
 }
 
+//create a plib instance by loading TLE from file
 module.exports.PLib_create = (tlepath)=>{
   var plib = PLib();
 
