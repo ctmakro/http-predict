@@ -1,0 +1,16 @@
+This archive contains the following images:
+
+home.gif:
+Copyright Everaldo Coelho
+Acquired from http://commons.wikimedia.org/wiki/Crystal_Clear under the GNU Lesser General Public License (http://www.gnu.org/copyleft/lesser.html).
+Resized, renamed, and converted to GIF format.
+
+saticon.gif:
+Copyright 2007 Olivier Charavel
+Acquired from http://sekkyumu.deviantart.com/art/Developpers-Icons-63052312 under the Creative Commons Attribution-Share Alike license (http://creativecommons.org/licenses/by-sa/3.0/).
+Resized, renamed, and converted to GIF format.
+
+world.jpg:
+Image courtesy of NASA’s Earth Observatory.
+Acquired from http://earthobservatory.nasa.gov/Newsroom/BlueMarble/BlueMarble_monthlies.html
+Resized, renamed, and brightness/contrast altered.

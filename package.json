@@ -1,0 +1,18 @@
+{
+  "name": "http-predict",
+  "version": "1.0.0",
+  "description": "An HTTP server based on Andy West's PredictLib.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Qin Yongliang",
+  "license": "ISC",
+  "dependencies": {
+    "arangojs": "^5.2.0",
+    "express": "^4.14.0",
+    "minimist": "^1.2.0",
+    "moment": "^2.16.0",
+    "request": "^2.78.0"
+  }
+}
