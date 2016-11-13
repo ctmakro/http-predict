@@ -51,12 +51,13 @@ root.use((req,res,next)=>{
 
   req.lng = Number(req.query.lng||0)
   req.lat = Number(req.query.lat||0)
-  req.darpa = Number(req.query.num||0).toString()
+  req.darpa = Number(req.query.num||-1).toString()
 
   next()
 })
 
 root.get('/predict',(req,res,next)=>{
+  if(req.darpa==='-1')throw 'NORAD # of the object not specified'
   getPrediction(req.darpa,req.lng,req.lat)
   .then(passes=>{
     var output = passesMapper(passes)
@@ -67,6 +68,7 @@ root.get('/predict',(req,res,next)=>{
 })
 
 root.get('/now',(req,res,next)=>{
+  if(req.darpa==='-1')throw 'NORAD # of the object not specified'
   plibcreator(req.darpa)
   .then(plib=>{
     plib.configureGroundStation(req.lat,req.lng);
@@ -78,6 +80,7 @@ root.get('/now',(req,res,next)=>{
 })
 
 root.get('/list',(req,res,next)=>{
+  if(req.darpa==='-1')throw 'NORAD # of the object not specified'
   plibcreator(req.darpa)
   .then(plib=>{
 
@@ -89,7 +92,7 @@ root.get('/list',(req,res,next)=>{
 
 root.get('/',(req,res)=>{
   res.end(`
-    KCSA Satellite Tracker
+    KCSA Real-time Satellite Tracker
 
     API:
 
