@@ -149,6 +149,8 @@ root.get('/',(req,res)=>{
     Server time and timezone: ${humanRep(Date.now())}
     服务器时间及时区：
 
+    Repository: github.com/ctmakro/http-predict
+
     (c)2016 Qin Yongliang / Kechuang Space Association.
     科创航天 覃永良
 
