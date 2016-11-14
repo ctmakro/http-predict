@@ -143,8 +143,8 @@ root.get('/',(req,res)=>{
     'num' parameter is the NORAD # of the target.
     'num' 参数是目标的 NORAD 编号。
 
-    TLEs are acquired from space-track.org and stored in ArangoDB database.
-    TLE描述文件是从 space-track.org 获取的，并存储在ArangoDB数据库中。
+    TLEs were acquired from space-track.org and stored in spaceTrackData.json.
+    TLE描述文件是从 space-track.org 获取的，并存储在 spaceTrackData.json 文件中。
 
     Server time and timezone: ${humanRep(Date.now())}
     服务器时间及时区：
