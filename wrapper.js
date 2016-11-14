@@ -11,13 +11,13 @@ var PLib_code = fs.readFileSync('./andrewtwest-orbtrak/predictlib.js')
 var postfix = (function(){
 
   //implemented for ease of operation
-  PLib.findAll = function(){
+  PLib.findAll = function(bias){
     var all = []
     for (z in PLib.sat)
     {
       var satInfo = {};
 
-      PLib.daynum = PLib.CurrentDaynum();
+      PLib.daynum = PLib.CurrentDaynum(bias);
       PLib.PreCalc(z);
       PLib.Calc();
 

@@ -1476,10 +1476,16 @@ var PLib =
 			return dn;
 		},
 
-		CurrentDaynum: function()
+		CurrentDaynum: function(bias)
 		{
-			var d = new Date();
-			return (d.getTime() - 315446400000) / 86400000;
+			// http-predict modification
+			bias=bias||0;
+
+			// timestamp locking during lifetime of the instance
+			var timestamp = PLib.globalstamp||Date.now()
+
+			return (timestamp + bias - 315446400000) / 86400000;
+			// ends
 		},
 
 		Daynum2Date: function(daynum)

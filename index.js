@@ -73,10 +73,27 @@ root.get('/predict',(req,res,next)=>{
 
 root.get('/now',(req,res,next)=>{
   if(req.darpa==='-1')throw 'NORAD # of the object not specified'
+
+  var bias = Number(req.query.bias||0) //how are you goin to shift the time?
+
   plibcreator(req.darpa)
   .then(plib=>{
     plib.configureGroundStation(req.lat,req.lng);
-    var output = passesMapper(plib.findAll())
+    plib.globalstamp = Date.now() //make stable between calculation
+
+    var current = plib.findAll(bias)
+    var somelater = plib.findAll(bias+1000)
+
+    var c = 299792458
+
+    for(i in current){
+      var delta = somelater[i].slantRange - current[i].slantRange
+      var relspeed = delta * 1000 / 1 // m/s
+      current[i].relSpeed = relspeed
+      current[i].dopplerFactor = c / (c + relspeed)
+    }
+
+    var output = passesMapper(current)
 
     res.send(output)
   })
@@ -110,29 +127,49 @@ root.get('/tle',(req,res,next)=>{
 root.get('/',(req,res)=>{
   res.end(`
     KCSA Real-time Satellite Tracker
+    科创航天实时卫星追踪工具
 
     API:
 
     /now?num=41845&lng=114&lat=23
+
     Current direction of the target, given the observer's longitude and latitude.
+    已知观察者经度及纬度，求目标当前方向。
+
+    /now?num=41845&lng=114&lat=23&bias=1000
+
+    Same as above but + 1s. bias is in milliseconds
+    同上，但预测的是一秒之后。偏置(bias)时间的单位是毫秒
 
     /predict?num=41845&lng=114&lat=23
+
     Prediction of passes within a day, given the observer's longitude and latitude.
+    已知观察者经度及纬度，预测一天内的过境事件。
 
     /list?num=41845
+
     Detailed info of the target.
+    指定目标的详细信息。
 
     /tle?num=41845
-    TLE description of the target (for use in other software).
 
-    'num' is the NORAD # of the target.
+    TLE description of the target (for use in other software).
+    指定目标的TLE描述文件（用于其他应用程序）。
+
+    'num' parameter is the NORAD # of the target.
+    'num' 参数是目标的 NORAD 编号。
+
     TLEs are acquired from space-track.org and stored in ArangoDB database.
+    TLE描述文件是从 space-track.org 获取的，并存储在ArangoDB数据库中。
 
     Server time and timezone: ${humanRep(Date.now())}
+    服务器时间及时区：
 
-    (c)2016 Qin Yongliang, Kechuang Space Association.
+    (c)2016 Qin Yongliang / Kechuang Space Association.
+    科创航天 覃永良
 
-    prediction is based on PredictLib from Andrew T. West.
+    Prediction is based on PredictLib from Andrew T. West.
+    预测结果基于 Andrew T. West 的 PredictLib 库。
 
     /****************************************************************************
     *          PredictLib: A satellite tracking/orbital prediction library      *
