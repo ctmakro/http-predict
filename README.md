@@ -14,7 +14,7 @@ Oh, check the demo at <https://bbs.kechuang.org/static/tracker/>
 
 # License
 
-MIT
+None
 
 # Special Thanks to Andrew T. West
 
