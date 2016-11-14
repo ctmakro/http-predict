@@ -17,7 +17,7 @@
 *                                                                           *
 *****************************************************************************/
 
-var PLib = 
+var PLib =
 	{
 		deg2rad: 1.745329251994330E-2,
 		pi: 3.14159265358979323846, pio2: 1.57079632679489656, twopi: 6.28318530717958623,
@@ -224,7 +224,7 @@ var PLib =
 		},
 
 		Scale_Vector: function(k, v)
-		{ 
+		{
 			v.x *= k;
 			v.y *= k;
 			v.z *= k;
@@ -292,41 +292,41 @@ var PLib =
 		},
 
 		Julian_Date_of_Epoch: function(epoch)
-		{ 
+		{
 			var year = 0.0, day = 0.0;
-		
+
 			year = parseInt(epoch * 1E-3);
 			day = ((epoch * 1E-3) - year) * 1E3;
-		
+
 			if (year < 57)
 				year = year + 2000;
 			else
 				year = year + 1900;
-		
+
 			return (PLib.Julian_Date_of_Year(year) + day);
 		},
 
 		Delta_ET: function(year)
 		{
 			var delta_et = 0.0;
-		
+
 			delta_et = 26.465 + 0.747622 * (year - 1950) + 1.886913 * Math.sin(PLib.twopi * (year - 1975) / 33);
-		
+
 			return delta_et;
 		},
 
 		ThetaG: function(epoch, deep_arg)
 		{
 			var year = 0.0, day = 0.0, UT = 0.0, jd = 0.0, TU = 0.0, GMST = 0.0, ThetaG = 0.0;
-		
+
 			year = parseInt(epoch * 1E-3);
 			day = ((epoch * 1E-3) - year) * 1E3;
-		
+
 			if (year < 57)
 				year += 2000;
 			else
 				year += 1900;
-		
+
 			UT = (day - parseInt(day));
 			day = parseInt(day);
 			jd = PLib.Julian_Date_of_Year(year) + day;
@@ -336,7 +336,7 @@ var PLib =
 			ThetaG = twopi * GMST / PLib.secday;
 			deep_arg.ds50 = jd - 2433281.5 + UT;
 			ThetaG = PLib.FMod2p(6.3003880987 * deep_arg.ds50 + 1.72944494);
-		
+
 			return ThetaG;
 		},
 
@@ -659,7 +659,7 @@ var PLib =
 				xndot = 0.0, xno2 = 0.0, xnodce = 0.0, xnoi = 0.0, xomi = 0.0, xpidot = 0.0, z1 = 0.0, z11 = 0.0, z12 = 0.0, z13 = 0.0, z2 = 0.0,
 				z21 = 0.0, z22 = 0.0, z23 = 0.0, z3 = 0.0, z31 = 0.0, z32 = 0.0, z33 = 0.0, ze = 0.0, zf = 0.0, zm = 0.0, zmo = 0.0, zn = 0.0, zsing = 0.0,
 				zsinh = 0.0, zsini = 0.0, zcosg = 0.0, zcosh = 0.0, zcosi = 0.0, delt = 0.0, ft = 0.0;
-		
+
 			switch (ientry)
 			{
 				case dpinit:
@@ -673,9 +673,9 @@ var PLib =
 				sinq = Math.sin(tle.xnodeo);
 				cosq = Math.cos(tle.xnodeo);
 				PLib.Deep.omegaq = tle.omegao;
-		
+
 				day = deep_arg.ds50 + 18261.5;
-		
+
 				if (day != PLib.Deep.preep)
 				{
 					PLib.Deep.preep = day;
@@ -698,7 +698,7 @@ var PLib =
 					PLib.Deep.zmos = 6.2565837 + 0.017201977 * day;
 					PLib.Deep.zmos = PLib.FMod2p(PLib.Deep.zmos);
 				    }
-		
+
 				  PLib.Deep.savtsn = 1E20;
 				  zcosg = PLib.zcosgs;
 				  zsing = PLib.zsings;
@@ -711,7 +711,7 @@ var PLib =
 				  ze = PLib.zes;
 				  zmo = PLib.Deep.zmos;
 				  xnoi = 1 / PLib.Deep.xnq;
-		
+
 				for (;;)
 				{
 					a1 = zcosg * zcosh + zsing * zcosi * zsinh;
@@ -759,10 +759,10 @@ var PLib =
 					sl = -zn * s3 * (z1 + z3 - 14 - 6 * deep_arg.eosq);
 					sgh = s4 * zn * (z31 + z33 - 6);
 					sh = -zn * s2 * (z21 + z23);
-		
+
 					if (PLib.Deep.xqncl < 5.2359877E-2)
 						sh = 0;
-		
+
 					PLib.Deep.ee2 = 2 * s1 * s6;
 					PLib.Deep.e3 = 2 * s1 * s7;
 					PLib.Deep.xi2 = 2 * s2 * z12;
@@ -775,10 +775,10 @@ var PLib =
 					PLib.Deep.xgh4 = -18 * s4 * ze;
 					PLib.Deep.xh2 = -2 * s2 * z22;
 					PLib.Deep.xh3 = -2 * s2  * (z23 - z21);
-		
+
 					if (PLib.isFlagSet(PLib.LUNAR_TERMS_DONE_FLAG))
 						break;
-		
+
 					PLib.Deep.sse = se;
 					PLib.Deep.ssi = si;
 					PLib.Deep.ssl = sl;
@@ -808,28 +808,28 @@ var PLib =
 					zmo = PLib.Deep.zmol;
 					PLib.SetFlag(PLib.LUNAR_TERMS_DONE_FLAG);
 				}
-		
+
 				PLib.Deep.sse = PLib.Deep.sse + se;
 				PLib.Deep.ssi = PLib.Deep.ssi + si;
 				PLib.Deep.ssl = PLib.Deep.ssl + sl;
 				PLib.Deep.ssg = PLib.Deep.ssg + sgh - deep_arg.cosio / deep_arg.sinio * sh;
 				PLib.Deep.ssh = PLib.Deep.ssh + sh / deep_arg.sinio;
-		
+
 				PLib.ClearFlag(PLib.RESONANCE_FLAG);
 				PLib.ClearFlag(PLib.SYNCHRONOUS_FLAG);
-		
+
 				if (!((PLib.Deep.xnq < 0.0052359877) && (PLib.Deep.xnq > 0.0034906585)))
 				{
 					if ((PLib.Deep.xnq < 0.00826) || (PLib.Deep.xnq > 0.00924))
 					    return;
-		
+
 					if (eq < 0.5)
 					    return;
-		
+
 					PLib.SetFlag(PLib.RESONANCE_FLAG);
 					eoc = eq * deep_arg.eosq;
 					g201 = -0.306 - (eq - 0.64) * 0.440;
-		
+
 					if (eq <= 0.65)
 					{
 						g211 = 3.616 - 13.247 * eq + 16.290 * deep_arg.eosq;
@@ -839,7 +839,7 @@ var PLib =
 						g422 = -146.407 + 841.880 * eq - 1629.014 * deep_arg.eosq + 1083.435 * eoc;
 						g520 = -532.114 + 3017.977 * eq - 5740 * deep_arg.eosq + 3708.276 * eoc;
 					}
-		
+
 					else
 					{
 						g211 = -72.099 + 331.819 * eq - 508.738 * deep_arg.eosq + 266.724 * eoc;
@@ -847,28 +847,28 @@ var PLib =
 						g322 = -342.585 + 1554.908 * eq - 2366.899 * deep_arg.eosq + 1215.972 * eoc;
 						g410 = -1052.797 + 4758.686 * eq - 7193.992 * deep_arg.eosq + 3651.957 * eoc;
 						g422 = -3581.69 + 16178.11 * eq - 24462.77 * deep_arg.eosq + 12422.52 * eoc;
-		
+
 						if (eq <= 0.715)
 							g520 = 1464.74 - 4664.75 * eq + 3763.64 * deep_arg.eosq;
-		
+
 						else
 							g520 = -5149.66 + 29936.92 * eq - 54087.36 * deep_arg.eosq + 31324.56 * eoc;
 					}
-		
+
 					if (eq < 0.7)
 					{
 						g533 = -919.2277 + 4988.61 * eq - 9064.77 * deep_arg.eosq + 5542.21 * eoc;
 						g521 = -822.71072 + 4568.6173 * eq - 8491.4146 * deep_arg.eosq + 5337.524 * eoc;
 						g532 = -853.666 + 4690.25 * eq - 8624.77 * deep_arg.eosq + 5341.4 * eoc;
 					}
-		
+
 					else
 					{
 						g533 = -37995.78 + 161616.52 * eq - 229838.2 * deep_arg.eosq + 109377.94 * eoc;
 						g521 = -51752.104 + 218913.95 * eq - 309468.16 * deep_arg.eosq + 146349.42 * eoc;
 						g532 = -40023.88 + 170470.89 * eq - 242699.48 * deep_arg.eosq + 115605.82 * eoc;
 					}
-		
+
 					sini2 = deep_arg.sinio * deep_arg.sinio;
 					f220 = 0.75 * (1 + 2 * deep_arg.cosio + deep_arg.theta2);
 					f221 = 1.5 * sini2;
@@ -905,12 +905,12 @@ var PLib =
 					bfact = deep_arg.xmdot + deep_arg.xnodot + deep_arg.xnodot - PLib.thdt - PLib.thdt;
 					bfact = bfact + PLib.Deep.ssl + PLib.Deep.ssh + PLib.Deep.ssh;
 				}
-		
+
 				else
 				{
 					PLib.SetFlag(PLib.RESONANCE_FLAG);
 					PLib.SetFlag(PLib.SYNCHRONOUS_FLAG);
-		
+
 					g200 = 1 + deep_arg.eosq * (-2.5 + 0.8125 * deep_arg.eosq);
 					g310 = 1 + 2 * deep_arg.eosq;
 					g300 = 1 + deep_arg.eosq * (-6 + 6.60937 * deep_arg.eosq);
@@ -929,35 +929,35 @@ var PLib =
 					bfact = deep_arg.xmdot + xpidot - PLib.thdt;
 					bfact = bfact + PLib.Deep.ssl + PLib.Deep.ssg + PLib.Deep.ssh;
 				}
-		
+
 				PLib.Deep.xfact = bfact - PLib.Deep.xnq;
-		
+
 				PLib.Deep.xli = PLib.Deep.xlamo;
 				PLib.Deep.xni = PLib.Deep.xnq;
 				PLib.Deep.atime = 0;
 				PLib.Deep.stepp = 720;
 				PLib.Deep.stepn = -720;
 				PLib.Deep.step2 = 259200;
-		
+
 				return;
-		
+
 				case dpsec:  /* Entrance for deep space secular effects */
 				deep_arg.xll = deep_arg.xll + PLib.Deep.ssl * deep_arg.t;
 				deep_arg.omgadf = deep_arg.omgadf + PLib.Deep.ssg * deep_arg.t;
 				deep_arg.xnode = deep_arg.xnode + PLib.Deep.ssh * deep_arg.t;
 				deep_arg.em = tle.eo + PLib.Deep.sse * deep_arg.t;
 				deep_arg.xinc = tle.xincl + PLib.Deep.ssi * deep_arg.t;
-		
+
 				if (deep_arg.xinc < 0)
 				{
 					deep_arg.xinc = -deep_arg.xinc;
 					deep_arg.xnode = deep_arg.xnode + pi;
 					deep_arg.omgadf = deep_arg.omgadf - pi;
 				}
-		
+
 				if (PLib.isFlagClear(PLib.RESONANCE_FLAG))
 				      return;
-		
+
 				do
 				{
 					if ((PLib.Deep.atime == 0) || ((deep_arg.t >= 0) && (PLib.Deep.atime < 0)) || ((deep_arg.t < 0) && (PLib.Deep.atime >= 0)))
@@ -966,12 +966,12 @@ var PLib =
 							delt = PLib.Deep.stepp;
 						else
 							delt = PLib.Deep.stepn;
-		
+
 						PLib.Deep.atime = 0;
 						PLib.Deep.xni = PLib.Deep.xnq;
 						PLib.Deep.xli = PLib.Deep.xlamo;
 					}
-		
+
 					else
 					{
 						if (Math.abs(deep_arg.t) >= Math.abs(PLib.Deep.atime))
@@ -982,7 +982,7 @@ var PLib =
 								delt = PLib.Deep.stepn;
 						}
 					}
-		
+
 					do
 					{
 						if (Math.abs(deep_arg.t - PLib.Deep.atime) >= PLib.Deep.stepp)
@@ -990,29 +990,29 @@ var PLib =
 							PLib.SetFlag(PLib.DO_LOOP_FLAG);
 							PLib.ClearFlag(PLib.EPOCH_RESTART_FLAG);
 						}
-		
+
 						else
 						{
 							ft = deep_arg.t - PLib.Deep.atime;
 							PLib.ClearFlag(PLib.DO_LOOP_FLAG);
 						}
-		
+
 						if (Math.abs(deep_arg.t) < Math.abs(PLib.Deep.atime))
 						{
 							if (deep_arg.t >= 0)
 								delt = PLib.Deep.stepn;
 							else
 								delt = PLib.Deep.stepp;
-		
+
 							PLib.SetFlag(PLib.DO_LOOP_FLAG | PLib.EPOCH_RESTART_FLAG);
 						}
-		
+
 						if (PLib.isFlagSet(PLib.SYNCHRONOUS_FLAG))
 						{
 							xndot = PLib.Deep.del1 * Math.sin(PLib.Deep.xli - PLib.Deep.fasx2) + PLib.Deep.del2 * Math.sin(2 * (PLib.Deep.xli - PLib.Deep.fasx4)) + PLib.Deep.del3 * Math.sin(3 * (PLib.Deep.xli - PLib.Deep.fasx6));
 							xnddt = PLib.Deep.del1 * Math.cos(PLib.Deep.xli - PLib.Deep.fasx2) + 2 * PLib.Deep.del2 * Math.cos(2 * (PLib.Deep.xli - PLib.Deep.fasx4)) + 3 * PLib.Deep.del3 * Math.cos(3 * (PLib.Deep.xli - PLib.Deep.fasx6));
 						}
-		
+
 						else
 						{
 							xomi = PLib.Deep.omegaq + deep_arg.omgdot * PLib.Deep.atime;
@@ -1021,10 +1021,10 @@ var PLib =
 							xndot = PLib.Deep.d2201 * Math.sin(x2omi + PLib.Deep.xli - g22) + PLib.Deep.d2211 * Math.sin(PLib.Deep.xli - g22) + PLib.Deep.d3210 * Math.sin(xomi + PLib.Deep.xli - g32) + PLib.Deep.d3222 * Math.sin(-xomi + PLib.Deep.xli - g32) + PLib.Deep.d4410 * sin(x2omi + x2li - g44) + PLib.Deep.d4422 * sin(x2li - g44) + PLib.Deep.d5220 * sin(xomi + PLib.Deep.xli - g52) + PLib.Deep.d5232 * sin(-xomi + PLib.Deep.xli - g52) + PLib.Deep.d5421 * sin(xomi + x2li - g54) + PLib.Deep.d5433 * sin(-xomi + x2li - g54);
 							xnddt = PLib.Deep.d2201 * Math.cos(x2omi + PLib.Deep.xli - g22) + PLib.Deep.d2211 * Math.cos(PLib.Deep.xli - g22) + PLib.Deep.d3210 * Math.cos(xomi + PLib.Deep.xli - g32) + PLib.Deep.d3222 * Math.cos(-xomi + PLib.Deep.xli - g32) + PLib.Deep.d5220 * cos(xomi + PLib.Deep.xli - g52) + PLib.Deep.d5232 * cos(-xomi + PLib.Deep.xli - g52) + 2 * (PLib.Deep.d4410 * cos(x2omi + x2li - g44) + PLib.Deep.d4422 * cos(x2li - g44) + PLib.Deep.d5421 * cos(xomi + x2li - g54) + PLib.Deep.d5433 * cos(-xomi + x2li - g54));
 						}
-		
+
 						xldot = PLib.Deep.xni + PLib.Deep.xfact;
 						xnddt = xnddt * xldot;
-		
+
 						if (PLib.isFlagSet(PLib.DO_LOOP_FLAG))
 						{
 							PLib.Deep.xli = PLib.Deep.xli + xldot * delt + xndot * PLib.Deep.step2;
@@ -1033,22 +1033,22 @@ var PLib =
 						}
 					} while (PLib.isFlagSet(PLib.DO_LOOP_FLAG) && PLib.isFlagClear(PLib.EPOCH_RESTART_FLAG));
 				} while (PLib.isFlagSet(PLib.DO_LOOP_FLAG) && PLib.isFlagSet(PLib.EPOCH_RESTART_FLAG));
-		
+
 				deep_arg.xn = PLib.Deep.xni + xndot * ft + xnddt * ft * ft * 0.5;
 				xl = PLib.Deep.xli + xldot * ft + xndot * ft * ft * 0.5;
 				temp = -deep_arg.xnode + PLib.Deep.thgr + deep_arg.t * PLib.thdt;
-		
+
 				if (PLib.isFlagClear(PLib.SYNCHRONOUS_FLAG))
 					deep_arg.xll = xl + temp + temp;
 				else
 					deep_arg.xll = xl - deep_arg.omgadf + temp;
-		
+
 				return;
-		
+
 				case dpper:
 				sinis = Math.sin(deep_arg.xinc);
 				cosis = Math.cos(deep_arg.xinc);
-		
+
 				if (Math.abs(PLib.Deep.savtsn - deep_arg.t) >= 30)
 				{
 					PLib.Deep.savtsn = deep_arg.t;
@@ -1076,12 +1076,12 @@ var PLib =
 					PLib.Deep.pinc = sis + sil;
 					PLib.Deep.pl = sls + sll;
 				}
-		
+
 				pgh = PLib.Deep.sghs + PLib.Deep.sghl;
 				ph = PLib.Deep.shs + PLib.Deep.sh1;
 				deep_arg.xinc = deep_arg.xinc + PLib.Deep.pinc;
 				deep_arg.em = deep_arg.em + PLib.Deep.pe;
-		
+
 				if (PLib.Deep.xqncl >= 0.2)
 				{
 					ph = ph / deep_arg.sinio;
@@ -1090,7 +1090,7 @@ var PLib =
 					deep_arg.xnode = deep_arg.xnode + ph;
 					deep_arg.xll = deep_arg.xll + PLib.Deep.pl;
 				}
-		
+
 				else
 				{
 					sinok = Math.sin(deep_arg.xnode);
@@ -1107,7 +1107,7 @@ var PLib =
 					xls = xls + dls;
 					xnoh = deep_arg.xnode;
 					deep_arg.xnode = Math.atan2(alfdp, betdp);
-		
+
 					if (Math.abs(xnoh - deep_arg.xnode) > PLib.pi)
 					{
 					      if (deep_arg.xnode < xnoh)
@@ -1115,18 +1115,18 @@ var PLib =
 					      else
 						  deep_arg.xnode -= PLib.twopi;
 					}
-		
+
 					deep_arg.xll = deep_arg.xll + PLib.Deep.pl;
 					deep_arg.omgadf = xls - deep_arg.xll - Math.cos(deep_arg.xinc) * deep_arg.xnode;
 				}
 				return;
 			}
 		},
-		
+
 		SDP4: function(tsince, tle, pos, vel)
 		{
 			var i = 0;
-		
+
 			var a = 0.0, axn = 0.0, ayn = 0.0, aynl = 0.0, beta = 0.0, betal = 0.0, capu = 0.0, cos2u = 0.0, cosepw = 0.0, cosik = 0.0,
 				cosnok = 0.0, cosu = 0.0, cosuk = 0.0, ecose = 0.0, elsq = 0.0, epw = 0.0, esine = 0.0, pl = 0.0, theta4 = 0.0, rdot = 0.0,
 				rdotk = 0.0, rfdot = 0.0, rfdotk = 0.0, rk = 0.0, sin2u = 0.0, sinepw = 0.0, sinik = 0.0, sinnok = 0.0, sinu = 0.0,
@@ -1135,13 +1135,13 @@ var PLib =
 				coef = 0.0, coef1 = 0.0, x1m5th = 0.0, xhdot1 = 0.0, del1 = 0.0, r = 0.0, delo = 0.0, eeta = 0.0, eta = 0.0, etasq = 0.0,
 				perigee = 0.0, psisq = 0.0, tsi = 0.0, qoms24 = 0.0, s4 = 0.0, pinvsq = 0.0, temp = 0.0, tempa = 0.0, temp1 = 0.0,
 				temp2 = 0.0, temp3 = 0.0, temp4 = 0.0, temp5 = 0.0, temp6 = 0.0, bx = 0.0, by = 0.0, bz = 0.0, cx = 0.0, cy = 0.0, cz = 0.0;
-		
+
 			PLib.SDP4.deep_arg = PLib.SDP4.deep_arg || new PLib.deep_arg_t();
-		
+
 			if (PLib.isFlagClear(PLib.SDP4_INITIALIZED_FLAG))
 			{
 				PLib.SetFlag(PLib.SDP4_INITIALIZED_FLAG);
-		
+
 				a1 = Math.pow(PLib.xke / tle.xno, PLib.tothrd);
 				PLib.SDP4.deep_arg.cosio = Math.cos(tle.xincl);
 				PLib.SDP4.deep_arg.theta2 = PLib.SDP4.deep_arg.cosio * PLib.SDP4.deep_arg.cosio;
@@ -1154,22 +1154,22 @@ var PLib =
 				delo = 1.5 * PLib.ck2 * PLib.SDP4.x3thm1 / (ao * ao * PLib.SDP4.deep_arg.betao * PLib.SDP4.deep_arg.betao2);
 				PLib.SDP4.deep_arg.xnodp = tle.xno / (1 + delo);
 				PLib.SDP4.deep_arg.aodp = ao / (1 - delo);
-		
+
 				s4 = s;
 				qoms24 = PLib.qoms2t;
 				perigee = (PLib.SDP4.deep_arg.aodp * (1 - tle.eo) - PLib.ae) * PLib.xkmper;
-			 
+
 				if (perigee < 156.0)
 				{
 					if (perigee <= 98.0)
 						s4 = 20.0;
 					else
 						s4 = perigee - 78.0;
-		
+
 					qoms24 = Math.pow((120 - s4) * PLib.ae / xkmper,4);
 					s4 = s4 / PLib.xkmper + PLib.ae;
 				}
-		
+
 				pinvsq = 1 / (PLib.SDP4.deep_arg.aodp * PLib.SDP4.deep_arg.aodp * PLib.SDP4.deep_arg.betao2 * PLib.SDP4.deep_arg.betao2);
 				PLib.SDP4.deep_arg.sing = Math.sin(tle.omegao);
 				PLib.SDP4.deep_arg.cosg = Math.cos(tle.omegao);
@@ -1200,10 +1200,10 @@ var PLib =
 				PLib.SDP4.xlcof = 0.125 * a3ovk2 * PLib.SDP4.deep_arg.sinio * (3 + 5 * PLib.SDP4.deep_arg.cosio) / (1 + PLib.SDP4.deep_arg.cosio);
 				PLib.SDP4.aycof = 0.25 * a3ovk2 * PLib.SDP4.deep_arg.sinio;
 				PLib.SDP4.x7thm1 = 7 * PLib.SDP4.deep_arg.theta2 - 1;
-		
+
 				Deep(dpinit, tle, PLib.SDP4.deep_arg);
 			}
-		
+
 			xmdf = tle.xmo + PLib.SDP4.deep_arg.xmdot * tsince;
 			PLib.SDP4.deep_arg.omgadf = tle.omegao + PLib.SDP4.deep_arg.omgdot * tsince;
 			xnoddf = tle.xnodeo + PLib.SDP4.deep_arg.xnodot * tsince;
@@ -1213,37 +1213,37 @@ var PLib =
 			tempe = tle.bstar * PLib.SDP4.c4 * tsince;
 			templ = PLib.SDP4.t2cof * tsq;
 			PLib.SDP4.deep_arg.xn = PLib.SDP4.deep_arg.xnodp;
-		
+
 			PLib.SDP4.deep_arg.xll = xmdf;
 			PLib.SDP4.deep_arg.t = tsince;
-		
+
 			Deep(dpsec, tle, PLib.SDP4.deep_arg);
-		
+
 			xmdf = PLib.SDP4.deep_arg.xll;
 			a = Math.pow(PLib.xke / PLib.SDP4.deep_arg.xn, PLib.tothrd) * tempa * tempa;
 			PLib.SDP4.deep_arg.em = PLib.SDP4.deep_arg.em - tempe;
 			xmam = xmdf + PLib.SDP4.deep_arg.xnodp * templ;
-		
+
 			PLib.SDP4.deep_arg.xll = xmam;
-		
+
 			Deep(PLib.dpper, tle, PLib.SDP4.deep_arg);
-		
+
 			xmam = PLib.SDP4.deep_arg.xll;
 			xl = xmam + PLib.SDP4.deep_arg.omgadf + PLib.SDP4.deep_arg.xnode;
 			beta = Math.sqrt(1 - PLib.SDP4.deep_arg.em * PLib.SDP4.deep_arg.em);
 			PLib.SDP4.deep_arg.xn = PLib.xke / Math.pow(a, 1.5);
-		
+
 			axn = PLib.SDP4.deep_arg.em * Math.cos(PLib.SDP4.deep_arg.omgadf);
 			temp = 1 / (a * beta * beta);
 			xll = temp * PLib.SDP4.xlcof * axn;
 			aynl = temp * PLib.SDP4.aycof;
 			xlt = xl + xll;
 			ayn = PLib.SDP4.deep_arg.em * Math.sin(PLib.SDP4.deep_arg.omgadf) + aynl;
-		
+
 			capu = FMod2p(xlt - PLib.SDP4.deep_arg.xnode);
 			temp2 = capu;
 			i = 0;
-		
+
 			do
 			{
 				sinepw = Math.sin(temp2);
@@ -1253,14 +1253,14 @@ var PLib =
 				temp5 = axn * cosepw;
 				temp6 = ayn * sinepw;
 				epw = (capu - temp4 + temp3 - temp2) / (1 - temp5 - temp6) + temp2;
-		
+
 				if (Math.abs(epw - temp2) <= e6a)
 					break;
-		
+
 				temp2 = epw;
-		
+
 			} while (i++ < 10);
-		
+
 			ecose = temp5 + temp6;
 			esine = temp3 - temp4;
 			elsq = axn * axn + ayn * ayn;
@@ -1281,14 +1281,14 @@ var PLib =
 			temp = 1 / pl;
 			temp1 = PLib.ck2 * temp;
 			temp2 = temp1 * temp;
-		
+
 			rk = r * (1 - 1.5 * temp2 * betal * PLib.SDP4.x3thm1) + 0.5 * temp1 * PLib.SDP4.x1mth2 * cos2u;
 			uk = u - 0.25 * temp2 * PLib.SDP4.x7thm1 * sin2u;
 			xnodek = PLib.SDP4.deep_arg.xnode + 1.5 * temp2 * PLib.SDP4.deep_arg.cosio * sin2u;
 			xinck = PLib.SDP4.deep_arg.xinc + 1.5 * temp2 * PLib.SDP4.deep_arg.cosio * PLib.SDP4.deep_arg.sinio * cos2u;
 			rdotk = rdot - PLib.SDP4.deep_arg.xn * temp1 * PLib.SDP4.x1mth2 * sin2u;
 			rfdotk = rfdot + PLib.SDP4.deep_arg.xn * temp1 * (PLib.SDP4.x1mth2 * cos2u + 1.5 * PLib.SDP4.x3thm1);
-		
+
 			sinuk = Math.sin(uk);
 			cosuk = Math.cos(uk);
 			sinik = Math.sin(xinck);
@@ -1303,26 +1303,26 @@ var PLib =
 			vx = xmx * cosuk - cosnok * sinuk;
 			vy = xmy * cosuk - sinnok * sinuk;
 			vz = sinik * cosuk;
-		
+
 			pos.x = rk * ux;
 			pos.y = rk * uy;
 			pos.z = rk * uz;
 			vel.x = rdotk * ux + rfdotk * vx;
 			vel.y = rdotk * uy + rfdotk * vy;
 			vel.z = rdotk * uz + rfdotk * vz;
-		
+
 			PLib.phase = xlt - PLib.SDP4.deep_arg.xnode - PLib.SDP4.deep_arg.omgadf + PLib.twopi;
-		
+
 			if (PLib.phase < 0.0)
 				PLib.phase += PLib.twopi;
-		
+
 			PLib.phase = PLib.FMod2p(PLib.phase);
 		},
-		
+
 		Calculate_User_PosVel: function(time, geodetic, obs_pos, obs_vel)
 		{
 			var c = 0.0, sq = 0.0, achcp = 0.0;
-		
+
 			geodetic.theta = PLib.FMod2p(PLib.ThetaG_JD(time) + geodetic.lon);
 			c = 1 / Math.sqrt(1 + PLib.f * (PLib.f - 2) * PLib.Sqr(Math.sin(geodetic.lat)));
 			sq = PLib.Sqr(1 - PLib.f) * c;
@@ -1336,56 +1336,56 @@ var PLib =
 			PLib.Magnitude(obs_pos);
 			PLib.Magnitude(obs_vel);
 		},
-		
+
 		Calculate_LatLonAlt: function(time, pos, geodetic)
 		{
 			var r = 0.0, e2 = 0.0, phi = 0.0, c = 0.0;
-		
+
 			geodetic.theta = Math.atan2(pos.y, pos.x);
 			geodetic.lon = PLib.FMod2p(geodetic.theta - PLib.ThetaG_JD(time));
 			r = Math.sqrt(PLib.Sqr(pos.x) + PLib.Sqr(pos.y));
 			e2 = PLib.f * (2 - PLib.f);
 			geodetic.lat = Math.atan2(pos.z, r);
-		
+
 			do
 			{
 				phi = geodetic.lat;
 				c = 1 / Math.sqrt(1 - e2 * PLib.Sqr(Math.sin(phi)));
 				geodetic.lat = Math.atan2(pos.z + PLib.xkmper * c * e2 * Math.sin(phi), r);
-		
+
 			} while (Math.abs(geodetic.lat - phi) >= 1E-10);
-		
+
 			geodetic.alt = r / Math.cos(geodetic.lat) - PLib.xkmper * c;
-		
+
 			if (geodetic.lat > PLib.pio2)
 				geodetic.lat -= PLib.twopi;
 		},
-		
+
 		Calculate_Obs: function(time, pos, vel, geodetic, obs_set)
 		{
 			var sin_lat = 0.0, cos_lat = 0.0, sin_theta = 0.0, cos_theta = 0.0, el = 0.0, azim = 0.0, top_s = 0.0, top_e = 0.0, top_z = 0.0;
-		
+
 			var obs_pos = new PLib.vector_t();
 			var obs_vel = new PLib.vector_t();
 			var range = new PLib.vector_t();
 			var rgvel = new PLib.vector_t();
-		
+
 			PLib.Calculate_User_PosVel(time, geodetic, obs_pos, obs_vel);
-		
+
 			range.x = pos.x - obs_pos.x;
 			range.y = pos.y - obs_pos.y;
 			range.z = pos.z - obs_pos.z;
-		
+
 			rx = range.x;
 			ry = range.y;
 			rz = range.z;
-		
+
 			rgvel.x = vel.x - obs_vel.x;
 			rgvel.y = vel.y - obs_vel.y;
 			rgvel.z = vel.z - obs_vel.z;
-		
+
 			PLib.Magnitude(range);
-		
+
 			sin_lat = Math.sin(geodetic.lat);
 			cos_lat = Math.cos(geodetic.lat);
 			sin_theta = Math.sin(geodetic.theta);
@@ -1394,22 +1394,22 @@ var PLib =
 			top_e = -sin_theta * range.x + cos_theta * range.y;
 			top_z = cos_lat * cos_theta * range.x+cos_lat * sin_theta * range.y + sin_lat * range.z;
 			azim = Math.atan(-top_e / top_s);
-		
+
 			if (top_s > 0.0)
 				azim = azim + PLib.pi;
-		
+
 			if (azim < 0.0)
 				azim = azim + PLib.twopi;
-		
+
 			el = Math.asin(top_z / range.w);
 			obs_set.x = azim;
 			obs_set.y = el;
 			obs_set.z = range.w;
-		
+
 			obs_set.w = PLib.Dot(range, rgvel) / range.w;
-		
+
 			obs_set.y = el;
-		
+
 			if (obs_set.y >= 0.0)
 				PLib.SetFlag(PLib.VISIBLE_FLAG);
 			else
@@ -1418,11 +1418,11 @@ var PLib =
 				PLib.ClearFlag(PLib.VISIBLE_FLAG);
 			}
 		},
-		
+
 		InternalUpdate: function(x)
 		{
 			var tempnum;
-		
+
 			PLib.sat[x].designator = PLib.sat[x].line1.substring(9, 17);
 			PLib.sat[x].catnum = PLib.sat[x].line1.substring(2, 7);
 			PLib.sat[x].year = PLib.sat[x].line1.substring(18, 20);
@@ -1450,7 +1450,7 @@ var PLib =
 				PLib.sat[z].name = PLib.tleData[z][0];
 				PLib.sat[z].line1 = PLib.tleData[z][1];
 				PLib.sat[z].line2 = PLib.tleData[z][2];
-				PLib.InternalUpdate(z);				
+				PLib.InternalUpdate(z);
 			}
 		},
 
@@ -1458,30 +1458,30 @@ var PLib =
 		{
 			var dn = 0;
 			var mm = 0.0, yy = 0.0;
-		
+
 			if (m < 3)
 			{
 				y--;
 				m += 12;
 			}
-		
+
 			if (y <= 50)
 				y += 100;
-		
+
 			yy = y;
 			mm = m;
 			dn = (Math.floor(365.25 * (yy - 80.0)) - Math.floor(19.0 + yy / 100.0) + Math.floor(4.75 + yy / 400.0) - 16.0);
 			dn += d + 30 * m + Math.floor(0.6 * mm - 0.3);
-			
+
 			return dn;
 		},
-		
+
 		CurrentDaynum: function()
 		{
 			var d = new Date();
 			return (d.getTime() - 315446400000) / 86400000;
 		},
-		
+
 		Daynum2Date: function(daynum)
 		{
 			var d = new Date();
@@ -1506,7 +1506,7 @@ var PLib =
 			PLib.tle.xmo = PLib.sat[x].meanan;
 			PLib.tle.xno = PLib.sat[x].meanmo;
 			PLib.tle.revnum = PLib.sat[x].orbitnum;
-		
+
 			PLib.ClearFlag(PLib.ALL_FLAGS);
 			PLib.select_ephemeris(PLib.tle);
 		},
@@ -1519,47 +1519,47 @@ var PLib =
 			var obs_set = new PLib.vector_t();
 			var solar_vector = new PLib.vector_t();
 			var solar_set = new PLib.vector_t();
-		
+
 			var sat_geodetic = new PLib.geodetic_t();
-		
+
 			PLib.jul_utc = PLib.daynum + 2444238.5;
-		
+
 			PLib.jul_epoch = PLib.Julian_Date_of_Epoch(PLib.tle.epoch);
 			PLib.tsince = (PLib.jul_utc - PLib.jul_epoch) * PLib.xmnpda;
 			PLib.age = PLib.jul_utc - PLib.jul_epoch;
-		
+
 			if (PLib.isFlagSet(PLib.DEEP_SPACE_EPHEM_FLAG))
 				PLib.ephem = "SDP4";
 			else
 				PLib.ephem = "SGP4";
-		
+
 			if (PLib.isFlagSet(PLib.DEEP_SPACE_EPHEM_FLAG))
 				PLib.SDP4(PLib.tsince, PLib.tle, pos, vel);
 			else
 				PLib.SGP4(PLib.tsince, PLib.tle, pos, vel);
-		
+
 			PLib.Convert_Sat_State(pos, vel);
-		
+
 			PLib.Magnitude(vel);
 			PLib.sat_vel = vel.w;
-		
+
 			PLib.Calculate_Obs(PLib.jul_utc, pos, vel, PLib.obs_geodetic, obs_set);
-		
+
 			PLib.Calculate_LatLonAlt(PLib.jul_utc, pos, sat_geodetic);
-		
+
 			PLib.Calculate_Solar_Position(PLib.jul_utc, solar_vector);
 			PLib.Calculate_Obs(PLib.jul_utc, solar_vector, zero_vector, PLib.obs_geodetic, solar_set);
-		
+
 			if (PLib.Sat_Eclipsed(pos, solar_vector))
 				PLib.SetFlag(PLib.SAT_ECLIPSED_FLAG);
 			else
 				PLib.ClearFlag(PLib.SAT_ECLIPSED_FLAG);
-		
+
 			if (PLib.isFlagSet(PLib.SAT_ECLIPSED_FLAG))
 				PLib.sat_sun_status = 0;
 			else
 				PLib.sat_sun_status = 1;
-		
+
 			PLib.sat_azi = PLib.Degrees(obs_set.x);
 			PLib.sat_ele = PLib.Degrees(obs_set.y);
 			PLib.sat_range = obs_set.z;
@@ -1567,22 +1567,28 @@ var PLib =
 			PLib.sat_lat = PLib.Degrees(sat_geodetic.lat);
 			PLib.sat_lon = PLib.Degrees(sat_geodetic.lon);
 			PLib.sat_alt = sat_geodetic.alt;
-		
+
 			PLib.fk = 12756.33 * Math.acos(PLib.xkmper / (PLib.xkmper + PLib.sat_alt));
 			PLib.fm = PLib.fk / 1.609344;
-		
+
 			PLib.rv = Math.floor((PLib.tle.xno * PLib.xmnpda / PLib.twopi + PLib.age * PLib.tle.bstar * PLib.ae) * PLib.age + PLib.tle.xmo / PLib.twopi) + parseInt(PLib.tle.revnum);
-		
+
 			PLib.sun_azi = PLib.Degrees(solar_set.x);
 			PLib.sun_ele = PLib.Degrees(solar_set.y);
-		
-			PLib.irk = Math.round(PLib.sat_range);
-			PLib.isplat = Math.round(PLib.sat_lat);
-			PLib.isplong = Math.round(360.0 - PLib.sat_lon);
-			PLib.iaz = Math.round(PLib.sat_azi);
-			PLib.iel = Math.round(PLib.sat_ele);
-			PLib.ma256 = Math.round(256.0 * (PLib.phase / PLib.twopi));
-		
+
+			// this section is modified by the author of http-predict.
+			var Math_round = n=>Math.round(n*100)/100
+
+			PLib.irk = Math_round(PLib.sat_range);
+			PLib.isplat = Math_round(PLib.sat_lat);
+			PLib.isplong = Math_round(360.0 - PLib.sat_lon);
+			PLib.iaz = Math_round(PLib.sat_azi);
+			PLib.iel = Math_round(PLib.sat_ele);
+			PLib.ma256 = Math_round(256.0 * (PLib.phase / PLib.twopi));
+
+			
+			// end
+
 			if (PLib.sat_sun_status)
 			{
 				if (PLib.sun_ele <= -12.0 && PLib.sat_ele >= 0.0)
@@ -1593,67 +1599,67 @@ var PLib =
 			else
 				PLib.findsun = ' ';
 		},
-		
+
 		AosHappens: function(x)
 		{
 			var lin = 0.0, sma = 0.0, apogee = 0.0;
-		
+
 			if (PLib.sat[x].meanmo == 0.0)
 				return 0;
 			else
 			{
 				lin = PLib.sat[x].incl;
-		
+
 				if (lin >= 90.0)
 					lin = 180.0 - lin;
-		
+
 				sma = 331.25 * Math.exp(Math.log(1440.0 / PLib.sat[x].meanmo) * (2.0 / 3.0));
 				apogee = sma * (1.0 + PLib.sat[x].eccn) - PLib.xkmper;
-		
+
 				if ((Math.acos(PLib.xkmper / (apogee + PLib.xkmper)) + (lin * PLib.deg2rad)) > Math.abs(PLib.qth.stnlat * PLib.deg2rad))
 					return 1;
 				else
 					return 0;
 			}
 		},
-	
+
 		Decayed: function(x, time)
 		{
 			var satepoch = 0.0;
-		
+
 			if (time == 0.0)
 				time = PLib.CurrentDaynum();
-		
+
 			satepoch = PLib.DayNum(1, 0, PLib.sat[x].year) + PLib.sat[x].refepoch;
-		
+
 			if (satepoch + ((16.666666 - PLib.sat[x].meanmo) / (10.0 * Math.abs(PLib.sat[x].drag))) < time)
 				return 1;
 			else
 				return 0;
 		},
-	
+
 		Geostationary: function(x)
 		{
-			if (Math.abs(PLib.sat[x].meanmo - 1.0027) < 0.0002) 
+			if (Math.abs(PLib.sat[x].meanmo - 1.0027) < 0.0002)
 				return 1;
 			else
 				return 0;
 		},
-	
+
 		FindAOS: function()
 		{
 			PLib.aostime = 0.0;
-		
+
 			if (PLib.AosHappens(indx) && PLib.Geostationary(indx) == 0 && PLib.Decayed(indx, PLib.daynum) == 0)
 			{
 				PLib.Calc();
-		
+
 				while (PLib.sat_ele < -1.0)
 				{
 					PLib.daynum -= 0.00035 * (PLib.sat_ele * (((PLib.sat_alt / 8400.0) + 0.46)) - 2.0);
 					PLib.Calc();
 				}
-		
+
 				while (PLib.aostime == 0.0)
 				{
 					if (Math.abs(PLib.sat_ele) < 0.03)
@@ -1665,29 +1671,29 @@ var PLib =
 					}
 				}
 			}
-		
+
 			return PLib.aostime;
 		},
-	
+
 		FindLOS: function()
 		{
 			PLib.lostime = 0.0;
-		
+
 			if (PLib.Geostationary(indx) == 0 && PLib.AosHappens(indx) == 1 && PLib.Decayed(indx, PLib.daynum) == 0)
 			{
 				PLib.Calc();
-		
+
 				do
 				{
 					PLib.daynum += PLib.sat_ele * Math.sqrt(PLib.sat_alt) / 502500.0;
 					PLib.Calc();
-		
+
 					if (Math.abs(PLib.sat_ele) < 0.03)
 						PLib.lostime = PLib.daynum;
-		
+
 				} while (PLib.lostime == 0.0);
 			}
-		
+
 			return PLib.lostime;
 		},
 
@@ -1702,7 +1708,7 @@ var PLib =
 					PLib.daynum = PLib.CurrentDaynum();
 					PLib.PreCalc(z);
 					PLib.Calc();
-	
+
 					if (PLib.Decayed(z, PLib.daynum) == 0)
 					{
 						satInfo.dateTime = PLib.Daynum2Date(PLib.daynum);
@@ -1710,7 +1716,7 @@ var PLib =
 						satInfo.azimuth = PLib.iaz;
 						satInfo.orbitalPhase = PLib.ma256;
 						satInfo.latitude = PLib.isplat;
-		
+
 						var lng = 360 - PLib.isplong;
 						if (lng > 180) lng = -PLib.isplong;
 						satInfo.longitude = lng;
@@ -1719,11 +1725,11 @@ var PLib =
 						satInfo.orbitNumber = PLib.rv;
 						satInfo.visibility = PLib.findsun;
 					}
-		
+
 					break;
 				}
 			}
-		
+
 			return satInfo;
 		},
 
@@ -1863,7 +1869,7 @@ var PLib =
 
 							PLib.daynum += (1 / 24 / 6);
 							PLib.daynum = PLib.FindAOS();
-						} 
+						}
 					}
 				}
 			}
