@@ -1,6 +1,7 @@
 var fs = require('fs')
 var config = require('./config.js')
-var backend = require('./backend.js').Backend(config.arangodb.conn,config.arangodb.dbname)
+
+//var backend = require('./backend.js').Backend(config.arangodb.conn,config.arangodb.dbname)
 
 // predictlib is not written as a module for node.
 // therefore we have to load and evaluate it differently
@@ -73,34 +74,23 @@ function loadTLE(path){
   return tledata
 }
 
-// load tle from database (async)
-function loadFromDatabase(darpa){
-  return backend.AQL(`
-    for i in tles
-    filter i._key == @key
-    return i
-    `,{key:darpa}
-  )
-  .then(res=>{
-    if(!res[0])throw 'record not found'
-    return res[0]
-  })
-}
+var hashmapper = require('./hashmap.js')
 
-// create a plib instance, by loading TLE from database (async)
-module.exports.PLib_create_fromDB = (darpa)=>{
+module.exports.getTLE = num=>hashmapper(num)
+
+// create a plib instance, by loading TLE from hashtable
+module.exports.PLib_create_fromhash = (darpa)=>{
   var plib = PLib();
-  return loadFromDatabase(darpa)
-  .then(res=>{
-    //console.log(res);
-    var lines = res.text.split('\n')
 
-    plib.tleData = [[lines[0],lines[1],lines[2]]]
-    plib.InitializeData();
+  var text = hashmapper(darpa)
+  if(!text)throw 'NORAD # not found'
 
-    return plib;
-  })
-  .catch(console.error)
+  var lines = text.split('\n')
+
+  plib.tleData = [[lines[0],lines[1],lines[2]]]
+  plib.InitializeData();
+
+  return plib;
 }
 
 //create a plib instance by loading TLE from file

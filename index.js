@@ -1,16 +1,16 @@
 var moment = require('moment');
 var config = require('./config.js')
-var backend = require('./backend.js').Backend(config.arangodb.conn,config.arangodb.dbname)
 
-var plibcreator = require('./wrapper.js').PLib_create_fromDB
+// var backend = require('./backend.js').Backend(config.arangodb.conn,config.arangodb.dbname)
+
+var plibcreator = require('./wrapper.js').PLib_create_fromhash
+var getTLE = require('./wrapper.js').getTLE
 
 function getPrediction(darpa,lng,lat){
-  return plibcreator(darpa)
-  .then(plib=>{
-    plib.configureGroundStation(lat,lng);
-    var passes = plib.getTodaysPasses();
-    return passes
-  })
+  var plib = plibcreator(darpa)
+  plib.configureGroundStation(lat,lng);
+  var passes = plib.getTodaysPasses();
+  return passes
 }
 
 function humanRep(date){
@@ -62,13 +62,9 @@ root.use((req,res,next)=>{
 
 root.get('/predict',(req,res,next)=>{
   if(req.darpa==='-1')throw 'NORAD # of the object not specified'
-  getPrediction(req.darpa,req.lng,req.lat)
-  .then(passes=>{
-    var output = passesMapper(passes)
-
-    res.send(output);
-  })
-  .catch(next)
+  var passes = getPrediction(req.darpa,req.lng,req.lat)
+  var output = passesMapper(passes)
+  res.send(output);
 })
 
 root.get('/now',(req,res,next)=>{
@@ -76,52 +72,40 @@ root.get('/now',(req,res,next)=>{
 
   var bias = Number(req.query.bias||0) //how are you goin to shift the time?
 
-  plibcreator(req.darpa)
-  .then(plib=>{
-    plib.configureGroundStation(req.lat,req.lng);
-    plib.globalstamp = Date.now() //make stable between calculation
+  var plib = plibcreator(req.darpa)
 
-    var current = plib.findAll(bias)
-    var somelater = plib.findAll(bias+1000)
+  plib.configureGroundStation(req.lat,req.lng);
+  plib.globalstamp = Date.now() //make stable between calculation
 
-    var c = 299792458
+  var current = plib.findAll(bias)
+  var somelater = plib.findAll(bias+1000)
 
-    for(i in current){
-      var delta = somelater[i].slantRange - current[i].slantRange
-      var relspeed = delta * 1000 / 1 // m/s
-      current[i].relSpeed = relspeed
-      current[i].dopplerFactor = c / (c + relspeed)
-    }
+  var c = 299792458
 
-    var output = passesMapper(current)
+  for(i in current){
+    var delta = somelater[i].slantRange - current[i].slantRange
+    var relspeed = delta * 1000 / 1 // m/s
+    current[i].relSpeed = relspeed
+    current[i].dopplerFactor = c / (c + relspeed)
+  }
 
-    res.send(output)
-  })
-  .catch(next)
+  var output = passesMapper(current)
+
+  res.send(output)
 })
 
 root.get('/list',(req,res,next)=>{
   if(req.darpa==='-1')throw 'NORAD # of the object not specified'
-  plibcreator(req.darpa)
-  .then(plib=>{
-
-    var out = passesMapper(plib.listSat())
-    res.send(out)
-  })
-  .catch(next)
+  var plib = plibcreator(req.darpa)
+  var out = passesMapper(plib.listSat())
+  res.send(out)
 })
 
 root.get('/tle',(req,res,next)=>{
   if(req.darpa==='-1')throw 'NORAD # of the object not specified'
-  backend.AQL(`
-    return document(tles,@id)
-    `,{id:req.darpa}
-  )
-  .then(r=>{
-    if(!r[0]) throw 'NORAD # not found in database'
-    res.send(r[0].text)
-  })
-  .catch(next)
+  r = getTLE(req.darpa)
+  if(!r) throw 'NORAD # not found in database'
+  res.send(r)
 })
 
 root.get('/',(req,res)=>{
@@ -199,4 +183,6 @@ root.use((err,req,res,next)=>{
   res.status(500).end(util.inspect(err));
 })
 
-root.listen(config.port)
+root.listen(config.port,()=>{
+  console.log('listening on',config.port);
+})

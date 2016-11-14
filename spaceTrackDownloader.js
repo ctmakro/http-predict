@@ -1,8 +1,9 @@
 var request = require('request')
+var fs = require('fs')
 var config = require('./config.js')
-var backend = require('./backend.js').Backend(config.arangodb.conn,config.arangodb.dbname)
-
-backend.newCollection('tles')
+// var backend = require('./backend.js').Backend(config.arangodb.conn,config.arangodb.dbname)
+//
+// backend.newCollection('tles')
 
 var post = (url,form)=>{
   console.log('requesting',url);
@@ -21,7 +22,7 @@ var post = (url,form)=>{
 post('https://www.space-track.org/ajaxauth/login',{
   identity:config.spacetrack.identity,
   password:config.spacetrack.password,
-  query:'https://www.space-track.org/basicspacedata/query/class/tle_latest/ORDINAL/1/EPOCH/%3Enow-30/orderby/NORAD_CAT_ID/format/3le'
+  query:config.spacetrack.query,
 })
 .then(res=>{
   console.log('request done');
@@ -34,12 +35,19 @@ post('https://www.space-track.org/ajaxauth/login',{
   })
   console.log('slicing done');
   //console.dir(records)
-  return backend.AQL(`
-    for i in @records
-    upsert {_key:i._key}
-    insert i
-    update i in tles
-    `,{records}
-  )
+
+  // return backend.AQL(`
+  //   for i in @records
+  //   upsert {_key:i._key}
+  //   insert i
+  //   update i in tles
+  //   `,{records}
+  // )
+
+
+  // i mean, why store them in database? 50000 record would fit directly in memory. damn.
+
+  console.log('writing to file...');
+  fs.writeFileSync('./spaceTrackData.json',JSON.stringify(records))
 })
 .catch(console.error)
