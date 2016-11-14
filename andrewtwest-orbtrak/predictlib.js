@@ -1577,7 +1577,8 @@ var PLib =
 			PLib.sun_ele = PLib.Degrees(solar_set.y);
 
 			// this section is modified by the author of http-predict.
-			var Math_round = n=>Math.round(n*100)/100
+			var Math_round = n=>n // n=>Math.round(n*100)/100
+			// var Math_round = Math.round
 
 			PLib.irk = Math_round(PLib.sat_range);
 			PLib.isplat = Math_round(PLib.sat_lat);
@@ -1586,7 +1587,7 @@ var PLib =
 			PLib.iel = Math_round(PLib.sat_ele);
 			PLib.ma256 = Math_round(256.0 * (PLib.phase / PLib.twopi));
 
-			
+
 			// end
 
 			if (PLib.sat_sun_status)
@@ -1865,7 +1866,11 @@ var PLib =
 								satInfo.visibility = '*';
 							}
 
-							satInfoColl[arrIdx++] = satInfo;
+							// modified by http-predict
+							var minimum_elevation = 2
+							if(satInfo.peakElevation>(minimum_elevation||0))
+								satInfoColl[arrIdx++] = satInfo;
+							// end
 
 							PLib.daynum += (1 / 24 / 6);
 							PLib.daynum = PLib.FindAOS();
