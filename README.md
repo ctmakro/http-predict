@@ -8,6 +8,8 @@ nearly all programming languages with HTTP support.
 
 # Deployment
 
+You should have Node.js v4(or above) installed on your system.
+
 ```bash
 
 $ git clone https://github.com/ctmakro/http-predict.git
