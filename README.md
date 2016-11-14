@@ -36,7 +36,9 @@ Finally,
 $ node index.js
 
 ```
-to start the server. Now direct your browser to `localhost:3000`.
+to start the server. Windows users may doubleclick on `run_server.bat`.
+
+Now direct your browser to `localhost:3000`.
 
 
 Oh and, check the demo at <https://bbs.kechuang.org/static/tracker/>
