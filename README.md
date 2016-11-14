@@ -8,15 +8,36 @@ nearly all programming languages with HTTP support.
 
 # Deployment
 
-1. `git clone https://github.com/ctmakro/http-predict.git` or download from github
-2. `cd http-predict`
-3. run `npm install` for dependencies
-4. Fill `config.js` with your SpaceTrack credentials
-5. run `node spaceTrackDownloader.js` to obtain latest data from the API address specified in `config.js`.
-the result will be saved to `spaceTrackData.json`.
-6. run `node index.js` to start the server. Direct your browser to `localhost:3000`.
+```bash
 
-And, check the demo at <https://bbs.kechuang.org/static/tracker/>
+$ git clone https://github.com/ctmakro/http-predict.git
+$ cd http-predict
+$ npm install
+$ cp config_example.js config.js
+
+```
+
+Then fill `config.js` with your SpaceTrack credentials.
+
+After that,
+```bash
+
+$ node spaceTrackDownloader.js
+
+```
+to obtain latest data from the API address specified in `config.js`.
+The result will be saved to `spaceTrackData.json`.
+
+Finally,
+```bash
+
+$ node index.js
+
+```
+to start the server. Now direct your browser to `localhost:3000`.
+
+
+Oh and, check the demo at <https://bbs.kechuang.org/static/tracker/>
 
 # License
 
