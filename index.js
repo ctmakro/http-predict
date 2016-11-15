@@ -146,7 +146,7 @@ jade.filters.markdown = md=>cw.render(cr.parse(md))
 
 root.get('/',(req,res)=>{
   res.type('text/html')
-  res.send(jade.renderFile('index.jade',{
+  res.send(jade.renderFile('./pages/index.jade',{
     humanRep
   }))
 })
