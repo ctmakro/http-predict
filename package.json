@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "arangojs": "^5.2.0",
+    "commonmark": "^0.26.0",
     "express": "^4.14.0",
+    "jade": "^1.11.0",
     "minimist": "^1.2.0",
     "moment": "^2.16.0",
     "request": "^2.78.0"

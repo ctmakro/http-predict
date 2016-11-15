@@ -1,0 +1,32 @@
+doctype html
+html(lang=zh-cn)
+  head
+    meta(charset='utf-8')
+    title Real-time Satellite Tracker 实时卫星追踪工具
+    style.
+      body {
+        font-size:12px;
+      }
+      div {
+        background-color:#eee;padding:10px;margin-bottom:10px;
+      }
+      p {
+        margin:10px;
+      }
+      a {
+        font-size:16px;
+      }
+      pre {
+        background-color:#ddd;padding:10px;
+      }
+      
+  body
+    p Server time and timezone: #{humanRep(Date.now())}
+      
+    .description
+      include:markdown description.md
+    
+    .project
+      include:markdown README.md
+    
+    
