@@ -9,6 +9,7 @@ var getTLE = require('./wrapper.js').getTLE
 function getPrediction(darpa,lng,lat){
   var plib = plibcreator(darpa)
   plib.configureGroundStation(lat,lng);
+  plib.globalstamp = Date.now() //make stable between calculation
   var passes = plib.getTodaysPasses();
   return passes
 }
@@ -26,9 +27,6 @@ function colonStyle(p){
   for(key in p){
     var value = p[key]
     if(!value)continue;
-    if(value instanceof Date){
-      value = value.valueOf()
-    }
     out+=key+' : '+value+'\n'
   }
   return out
@@ -37,9 +35,14 @@ function colonStyle(p){
 function passesMapper(passes,asjson){
   var output = passes.map(p=>{
 
-    p.dateTimeStartHuman = humanRep(p.dateTimeStart)
-    p.dateTimeEndHuman = humanRep(p.dateTimeEnd)
-    p.dateTimeHuman = humanRep(p.dateTime)
+    for(key in p){
+      var value = p[key]
+      if(!value)continue;
+      if(value instanceof Date){
+        p[key+'Human'] = humanRep(value)
+        p[key] = value.valueOf()
+      }
+    }
 
     return p
   })

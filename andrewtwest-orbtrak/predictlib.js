@@ -1480,6 +1480,7 @@ var PLib =
 		{
 			// http-predict modification
 			bias=bias||0;
+			//console.log('CurrentDaynum',PLib.globalstamp);
 
 			// timestamp locking during lifetime of the instance
 			var timestamp = PLib.globalstamp||Date.now()
@@ -1780,6 +1781,9 @@ var PLib =
 
 		getTodaysPasses: function()
 		{
+			//debug
+			//console.log(PLib.globalstamp);
+
 			var satInfoColl = new Array();
 			var arrIdx = 0;
 			var x = 0, y = 0, z = 0, lastel = 0;
@@ -1787,6 +1791,7 @@ var PLib =
 
 			for (z = 0; z < PLib.sat.length; z++)
 			{
+				//console.log('for',z);
 				indx = z;
 
 				now = (3651.0 + PLib.CurrentDaynum()) * 86400.0;
@@ -1800,20 +1805,24 @@ var PLib =
 					PLib.PreCalc(indx);
 					PLib.Calc();
 
-					var d = new Date();
+					var d = PLib.globalstamp?new Date(PLib.globalstamp):new Date();
 					var passNo = 1;
 
 					if (PLib.AosHappens(indx) && PLib.Geostationary(indx) == 0 && PLib.Decayed(indx, PLib.daynum) == 0)
 					{
 						PLib.daynum = PLib.FindAOS();
 
+						//debug
+						var dbg=0
 						while (PLib.Daynum2Date(PLib.daynum) < PLib.addDay(d))
 						{
 							var satInfo = new Object();
 
+							//console.log('while',PLib.daynum,dbg++);
+
 							satInfo.number = z + 1;
 							satInfo.name = PLib.sat[z].name;
-							satInfo.passNo = passNo++;
+
 							satInfo.dateTimeStart = PLib.Daynum2Date(PLib.daynum);
 							satInfo.peakElevation = PLib.iel;
 							satInfo.riseAzimuth
@@ -1853,7 +1862,7 @@ var PLib =
 								PLib.Calc();
 							}
 
-							if (lastel != 0)
+							if (lastel<0)//modded
 							{
 								PLib.daynum = PLib.FindLOS();
 								PLib.Calc();
@@ -1874,8 +1883,10 @@ var PLib =
 
 							// modified by http-predict
 							var minimum_elevation = 2
-							if(satInfo.peakElevation>(minimum_elevation||0))
+							if(satInfo.peakElevation>(minimum_elevation||0)){
+								satInfo.passNo = passNo++;
 								satInfoColl[arrIdx++] = satInfo;
+							}
 							// end
 
 							PLib.daynum += (1 / 24 / 6);
